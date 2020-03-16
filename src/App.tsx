@@ -7,9 +7,8 @@ import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
 
 import './App.css';
 
-import { Navigation } from "./Navigation";
-import { Example } from "./Example";
-import { FormGroupExample } from "./Form";
+import { Navigation } from "./Navbar/Navigation";
+import { FormGroupExample } from "./Form/Form";
 
 function App() {
   return (

@@ -95,9 +95,9 @@ export class FormGroupExample extends React.PureComponent<
   };
 
   // form event handlers
-  handleValueChange = (value: number) => {
-    console.log(value);
-  };
+  handleNameChange = () => {
+    console.log('i changed my name');
+  }
   handleTicketStatusChange = (event: React.FormEvent<HTMLInputElement>) => {
     const ticketStatus = event.currentTarget.value;
     this.setState({ ticketStatus });
@@ -159,6 +159,7 @@ export class FormGroupExample extends React.PureComponent<
     
     return savedSearches;
   };
+
   getScheduleFrequencyMax = () => {
     const { scheduleInterval } = this.state;
     let max = 1;
@@ -177,9 +178,6 @@ export class FormGroupExample extends React.PureComponent<
   };
 
   public render() {
-
-    const maxScheduleFrequency: number = this.getScheduleFrequencyMax();
-
     return (
       <div>
         <form>
@@ -353,12 +351,13 @@ export class FormGroupExample extends React.PureComponent<
                     checked={this.state.isRecurring}
                     label="Run Every"
                     onChange={this.handleIsRecurringChange}
+                    inline={true}
                   />
                   {this.state.isRecurring && (
                     <ControlGroup>
                       <NumericInput
                         min={1}
-                        max={maxScheduleFrequency}
+                        max={this.getScheduleFrequencyMax()}
                         onValueChange={this.handleScheduleFrequencyChange}
                         clampValueOnBlur={true}
                         buttonPosition="none"
