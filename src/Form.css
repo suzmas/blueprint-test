@@ -1,0 +1,84 @@
+form {
+    padding: 5%;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    box-shadow: 0 10px 30px 0 rgba(38, 52, 65, 0.2);
+}
+.form-header {
+    font-weight: 400;
+    margin-bottom: 3rem;
+}
+.form-section {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.form-subsection {
+    margin-bottom: 2rem;
+}
+.form-section h1, .form-section h2 {
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+.form-section h3, .form-section h4, .form-section h5 {
+    margin-bottom: 1rem;
+}
+
+/* "Chip"-style radio input */
+.radio-chip .bp3-control-indicator {
+    display: none;
+}
+.radio-chip.bp3-control.bp3-radio {
+    margin: 0 5px;
+    padding: 5px 15px;
+    border: 1px solid #c0c0c0;
+    border-radius: 15px;
+}
+.radio-chip.bp3-control.bp3-radio.checked {
+    border: 1px solid rgb(0, 112, 192);
+    background-color: rgb(207 223 255);
+    color: rgb(0, 112, 192);
+}
+
+/* dropdown select lists */
+.bp3-button.dropdown-select-btn {
+    background-color: #f3f7fb;
+}
+ .multi-tag-container {
+     padding: 1rem;
+     margin: 1rem 0;
+     background-color: #f3f7fb;
+     border-radius: 3px;
+ }
+ .multi-tag-container .bp3-tag {
+     margin: 0 0.25rem;
+     background-color: #fff;
+ }
+
+ .bp3-divider {
+    border-bottom-color: rgba(16, 22, 26, 0.09);
+ }
+
+/* utility classes */
+.spacer-text {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-self: center;
+}
+.input-title, label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+[class^='bp3'].bkg-lightgrey {
+    background-color: #f3f7fb;
+}
+
+/* blueprint overrides */
+[class^='bp3'].bp3-input, .bp3-input {
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+    box-shadow: none;
+}
+.bp3-input:focus {
+    box-shadow: inset 0 0 0 3px rgba(19, 124, 189, 0.3);
+}
