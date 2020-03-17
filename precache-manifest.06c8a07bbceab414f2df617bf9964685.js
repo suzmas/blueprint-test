@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "bf785d8f198777186a765040d0e44f45",
+    "revision": "08aeed3834cfef159bb5c8cb4f006f89",
     "url": "/blueprint-test/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/blueprint-test/static/css/2.345a7bfb.chunk.css"
   },
   {
-    "revision": "a1bc9b51141698c20653",
-    "url": "/blueprint-test/static/css/main.4e6b4e4a.chunk.css"
+    "revision": "526eed681e8c528089d2",
+    "url": "/blueprint-test/static/css/main.9dceccfe.chunk.css"
   },
   {
     "revision": "e2a6aa39f3e5fb48f034",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/blueprint-test/static/js/2.50829cd7.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a1bc9b51141698c20653",
-    "url": "/blueprint-test/static/js/main.939871a0.chunk.js"
+    "revision": "526eed681e8c528089d2",
+    "url": "/blueprint-test/static/js/main.e4370700.chunk.js"
   },
   {
     "revision": "acb103aa8a2c9c078498",
