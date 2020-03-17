@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   FormGroup,
@@ -15,14 +15,15 @@ import {
   Checkbox,
   NumericInput,
   Tag
-} from "@blueprintjs/core";
+} from '@blueprintjs/core';
 
-import { Select, ItemRenderer, ItemPredicate } from "@blueprintjs/select";
-import { DateInput, TimePrecision } from "@blueprintjs/datetime";
+import { Select, ItemRenderer, ItemPredicate } from '@blueprintjs/select';
+import { DateInput, TimePrecision } from '@blueprintjs/datetime';
 
-import "./Form.css";
+import './Form.css';
 
-export interface FormGroupExampleState {
+export interface FormExampleState {
+  name: string;
   ticketStatus: string;
   savedSearchFilters: SavedSearch[];
   assignmentType: string;
@@ -40,20 +41,20 @@ interface SavedSearch {
 }
 const SavedSearches = {
   items: [
-    { name: "Great Search I saved", value: "1", disabled: false },
-    { name: "Tickets I Love", value: "12", disabled: false },
-    { name: "Find What I want!", value: "123", disabled: false },
-    { name: "Rude Dude", value: "1234", disabled: false },
-    { name: "Do people give their dogs middle names?", value: "12345", disabled: false },
-    { name: "Finneus Maximus", value: "123456", disabled: false },
-    { name: "Tickets I don't Love", value: "1234567", disabled: false },
+    { name: 'Great Search I saved', value: '1', disabled: false },
+    { name: 'Tickets I Love', value: '12', disabled: false },
+    { name: 'Find What I want!', value: '123', disabled: false },
+    { name: 'Rude Dude', value: '1234', disabled: false },
+    { name: 'Do people give their dogs middle names?', value: '12345', disabled: false },
+    { name: 'Finneus Maximus', value: '123456', disabled: false },
+    { name: 'Tickets I don\'t Love', value: '1234567', disabled: false },
   ]
 };
 const SavedSearchSelect = Select.ofType<SavedSearch>();
 
 interface ScheduleInterval {
   name: string;
-  value: "day" | "week" | "month";
+  value: 'day' | 'week' | 'month';
 }
 const ScheduleIntervalSelect = Select.ofType<ScheduleInterval>();
 
@@ -79,24 +80,26 @@ const renderSavedSearch: ItemRenderer<SavedSearch> = (
   );
 };
 
-export class FormGroupExample extends React.PureComponent<
+export class FormExample extends React.PureComponent<
   {},
-  FormGroupExampleState
+  FormExampleState
 > {
-  public state: FormGroupExampleState = {
-    ticketStatus: "all",
+  public state: FormExampleState = {
+    name: '',
+    ticketStatus: 'all',
     savedSearchFilters: [],
-    assignmentType: "random",
-    distributionType: "even",
-    isSetSchedule: false,
-    isRecurring: false,
+    assignmentType: 'random',
+    distributionType: 'even',
+    isSetSchedule: true,
+    isRecurring: true,
     scheduleFrequency: null,
     scheduleInterval: null
   };
 
   // form event handlers
-  handleNameChange = () => {
-    console.log('i changed my name');
+  handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const name = event.currentTarget.value;
+    this.setState({ name });
   }
   handleTicketStatusChange = (event: React.FormEvent<HTMLInputElement>) => {
     const ticketStatus = event.currentTarget.value;
@@ -125,7 +128,7 @@ export class FormGroupExample extends React.PureComponent<
     });
   };
   handleCreateSearch = () => {
-    console.log("create saved search");
+    console.log('create saved search');
   };
   handleIsSetScheduleChange = () => {
     const isSetSchedule = !this.state.isSetSchedule;
@@ -164,13 +167,13 @@ export class FormGroupExample extends React.PureComponent<
     const { scheduleInterval } = this.state;
     let max = 1;
     switch (scheduleInterval) {
-      case "day":
+      case 'day':
         max = 364;
         break;
-      case "week":
+      case 'week':
         max = 52;
         break;
-      case "month":
+      case 'month':
         max = 12;
         break;
     }
@@ -181,39 +184,40 @@ export class FormGroupExample extends React.PureComponent<
     return (
       <div>
         <form>
-          <H1 className="form-header">Send Grading Assignments</H1>
-          <div className="form-section">
+          <H1 className='form-header'>Send Grading Assignments</H1>
+          <div className='form-section'>
             <H2>Describe the Automation</H2>
             <FormGroup
-              label="Automation Name"
-              labelFor="text-input"
-              labelInfo={"*"}
+              label='Automation Name'
+              labelFor='text-input'
+              labelInfo={'*'}
             >
               <InputGroup
-                id="text-input"
-                placeholder="Name this automation"
+                id='text-input'
+                placeholder='Name this automation'
+                onChange={this.handleNameChange}
                 large={true}
               />
             </FormGroup>
           </div>
           <Divider />
-          <div className="form-section">
+          <div className='form-section'>
             <H2>Choose Tickets</H2>
-            <div className="form-subsection">
+            <div className='form-subsection'>
               <H3>Find Tickets</H3>
               <RadioGroup
-                label="Ticket Status"
+                label='Ticket Status'
                 onChange={this.handleTicketStatusChange}
                 selectedValue={this.state.ticketStatus}
                 inline={true}
-                className="radio-chips"
+                className='radio-chips'
               >
-                {["all", "graded", "created", "updated", "solved"].map(
+                {['all', 'graded', 'created', 'updated', 'solved'].map(
                   status => {
                     const checked = status === this.state.ticketStatus;
                     const classes = checked
-                      ? "radio-chip checked"
-                      : "radio-chip";
+                      ? 'radio-chip checked'
+                      : 'radio-chip';
                     return (
                       <Radio
                         key={status}
@@ -226,31 +230,31 @@ export class FormGroupExample extends React.PureComponent<
                 )}
               </RadioGroup>
             </div>
-            <div className="form-subsection">
+            <div className='form-subsection'>
               <H3>Refine Ticket Results</H3>
               <ControlGroup>
                 <SavedSearchSelect
                   items={this.getSavedSearchFilters()}
                   itemPredicate={filterSavedSearch}
                   itemRenderer={renderSavedSearch}
-                  noResults={<MenuItem disabled={true} text="No results." />}
+                  noResults={<MenuItem disabled={true} text='No results.' />}
                   onItemSelect={this.handleAddSavedSearchFilter}
-                  className="bp3-large"
+                  className='bp3-large'
                 >
                   <Button
-                    text={"Select saved searches"}
-                    rightIcon="double-caret-vertical"
+                    text={'Select saved searches'}
+                    rightIcon='double-caret-vertical'
                     minimal={true}
-                    className={"dropdown-select-btn"}
+                    className={'dropdown-select-btn'}
                   />
                 </SavedSearchSelect>
-                <span className="spacer-text">or</span>
-                <Button icon="add" onClick={this.handleCreateSearch} className="bkg-lightgrey" minimal={true} large={true}>
+                <span className='spacer-text'>or</span>
+                <Button icon='add' onClick={this.handleCreateSearch} className='bkg-lightgrey' minimal={true} large={true}>
                   Create a new search
                 </Button>
               </ControlGroup>
               {this.state.savedSearchFilters.length > 0 && (
-              <div className="multi-tag-container">
+              <div className='multi-tag-container'>
                 {this.state.savedSearchFilters.map(search => {
                   return (
                     <Tag
@@ -270,20 +274,20 @@ export class FormGroupExample extends React.PureComponent<
             </div>
           </div>
           <Divider />
-          <div className="form-section">
+          <div className='form-section'>
             <H2>Choose Tickets</H2>
-            <div className="form-subsection">
+            <div className='form-subsection'>
               <H3>Assign Tickets</H3>
               <RadioGroup
-                label="Assignment Type"
+                label='Assignment Type'
                 onChange={this.handleAssignmentTypeChange}
                 selectedValue={this.state.assignmentType}
                 inline={true}
-                className={"radio-chips"}
+                className={'radio-chips'}
               >
-                {["manual", "random"].map(assignmentType => {
+                {['manual', 'random'].map(assignmentType => {
                   const checked = assignmentType === this.state.assignmentType;
-                  const classes = checked ? "radio-chip checked" : "radio-chip";
+                  const classes = checked ? 'radio-chip checked' : 'radio-chip';
                   return (
                     <Radio
                       key={assignmentType}
@@ -295,18 +299,18 @@ export class FormGroupExample extends React.PureComponent<
                 })}
               </RadioGroup>
             </div>
-            <div className="form-subsection">
+            <div className='form-subsection'>
               <RadioGroup
-                label="Distribution Type"
+                label='Distribution Type'
                 onChange={this.handleDistributionTypeChange}
                 selectedValue={this.state.distributionType}
                 inline={true}
-                className={"radio-chips"}
+                className={'radio-chips'}
               >
-                {[{name: "evenly", value: 'even'}, {name: "by percent", value: 'percent'}].map(({name, value}) => {
+                {[{name: 'evenly', value: 'even'}, {name: 'by percent', value: 'percent'}].map(({name, value}) => {
                   const checked =
                     value === this.state.distributionType;
-                  const classes = checked ? "radio-chip checked" : "radio-chip";
+                  const classes = checked ? 'radio-chip checked' : 'radio-chip';
                   return (
                     <Radio
                       key={value}
@@ -320,19 +324,19 @@ export class FormGroupExample extends React.PureComponent<
             </div>
           </div>
           <Divider />
-          <div className="form-section">
+          <div className='form-section'>
             <H2>Set Schedule</H2>
-            <div className="form-subsection">
-              <span className="input-title">Frequency</span>
+            <div className='form-subsection'>
+              <span className='input-title'>Frequency</span>
               <Checkbox
                 checked={!this.state.isSetSchedule}
-                label="No schedule (manually trigger)"
+                label='No schedule (manually trigger)'
                 onChange={this.handleIsSetScheduleChange}
               />
             </div>
             {this.state.isSetSchedule && (
-              <div className="form-subsection">
-                <span className="input-title">Starting On</span>
+              <div className='form-subsection'>
+                <span className='input-title'>Starting On</span>
                 <DateInput
                   onChange={this.handleScheduleStartDateChange}
                   timePrecision={TimePrecision.MINUTE}
@@ -340,16 +344,16 @@ export class FormGroupExample extends React.PureComponent<
                   parseDate={str => new Date(str)}
                   minDate={new Date()}
                   timePickerProps={{useAmPm: true}}
-                  placeholder={"Select a date"}
+                  placeholder={'Select a date'}
                 />
               </div>
             )}
             {this.state.isSetSchedule && (
               <div>
-                <div className="form-subsection">
+                <div className='form-subsection'>
                   <Checkbox
                     checked={this.state.isRecurring}
-                    label="Run Every"
+                    label='Run Every'
                     onChange={this.handleIsRecurringChange}
                     inline={true}
                   />
@@ -360,13 +364,13 @@ export class FormGroupExample extends React.PureComponent<
                         max={this.getScheduleFrequencyMax()}
                         onValueChange={this.handleScheduleFrequencyChange}
                         clampValueOnBlur={true}
-                        buttonPosition="none"
+                        buttonPosition='none'
                       />
                       <ScheduleIntervalSelect
                         items={[
-                          { name: "day(s)", value: "day" },
-                          { name: "week(s)", value: "week" },
-                          { name: "month(s)", value: "month" }
+                          { name: 'day(s)', value: 'day' },
+                          { name: 'week(s)', value: 'week' },
+                          { name: 'month(s)', value: 'month' }
                         ]}
                         itemRenderer={renderSavedSearch}
                         onItemSelect={({ value }) =>
@@ -377,11 +381,11 @@ export class FormGroupExample extends React.PureComponent<
                           text={
                             this.state.scheduleInterval
                               ? `${this.state.scheduleInterval}(s)`
-                              : "Select time interval"
+                              : 'Select time interval'
                           }
-                          rightIcon="double-caret-vertical"
+                          rightIcon='double-caret-vertical'
                           minimal={true}
-                          className={"dropdown-select-btn"}
+                          className={'dropdown-select-btn'}
                         />
                       </ScheduleIntervalSelect>
                     </ControlGroup>

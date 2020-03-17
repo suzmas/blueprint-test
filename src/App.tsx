@@ -8,14 +8,14 @@ import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
 import './App.css';
 
 import { Navigation } from "./Navbar/Navigation";
-import { FormGroupExample } from "./Form/Form";
+import { FormExample } from "./Form/Form";
 
 function App() {
   return (
     <div className="App">
       <Navigation />
       <div className="section">
-        <FormGroupExample />
+        <FormExample />
       </div>
     </div>
   );
