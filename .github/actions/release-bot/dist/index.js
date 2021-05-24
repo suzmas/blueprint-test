@@ -6196,12 +6196,12 @@ const thething = async (githubToken, owner, repo) => {
   const thing = await octokit.rest.repos.listContributors({ owner, repo });
   console.log(thing);
   try {
-    const closedIssues = await octokit.rest.issues.list({
+    const closedIssues = await octokit.rest.pulls.list({
       owner,
       repo,
       state: 'closed',
       labels: ['merged'],
-      since: '2021-05-23T22:37:46.261Z'
+      since: '2021-05-22T22:37:46.261Z'
     });
   
     console.log(closedIssues);
