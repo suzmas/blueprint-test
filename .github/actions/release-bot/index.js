@@ -17,7 +17,7 @@ try {
   const owner = payload.repository.owner.name;
   const repo = payload.repository.name;
   console.log(owner, repo);
-  const closedIssues = octokit.rest.issues.list({
+  const closedIssues = await octokit.rest.issues.list({
     owner,
     repo,
     state: 'closed',
