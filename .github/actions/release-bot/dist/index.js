@@ -6193,6 +6193,8 @@ const github = __nccwpck_require__(122);
 const thething = async (githubToken, owner, repo) => {
   const octokit = github.getOctokit(githubToken);
 
+  console.log(octokit);
+
   const closedIssues = await octokit.rest.issues.list({
     owner,
     repo,

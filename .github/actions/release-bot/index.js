@@ -4,6 +4,8 @@ const github = require('@actions/github');
 const thething = async (githubToken, owner, repo) => {
   const octokit = github.getOctokit(githubToken);
 
+  console.log(octokit);
+
   const closedIssues = await octokit.rest.issues.list({
     owner,
     repo,
