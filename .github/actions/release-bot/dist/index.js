@@ -6195,6 +6195,7 @@ const thething = async (githubToken, owner, repo) => {
 
   console.log(octokit);
 
+  const thing = octokit.rest.repos.listContributors({ owner, repo })
   const closedIssues = await octokit.rest.issues.list({
     owner,
     repo,
