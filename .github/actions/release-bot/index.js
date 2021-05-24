@@ -21,17 +21,13 @@ try {
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-
+  const payload = github.context.payload;
   const githubToken = core.getInput('repo-token');
-  thething(githubToken, owner, repo);
-
-
-  const owner = github.context.payload.repository.owner.name;
-  const repo = github.context.payload.repository.name;
+  const owner = payload.repository.owner.name;
+  const repo = payload.repository.name;
   console.log(owner, repo);
-  console.log(github.context.payload.repository);
 
+  thething();
 } catch (error) {
   core.setFailed(error.message);
 }
