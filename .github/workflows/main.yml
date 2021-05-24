@@ -13,6 +13,7 @@ jobs:
         uses: ./.github/actions/release-bot # Uses an action in the root directory
         id: hello
         with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
       - name: Get the output time
