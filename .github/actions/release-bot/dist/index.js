@@ -6216,7 +6216,7 @@ try {
   const repo = payload.repository.name;
   console.log(owner, repo);
 
-  thething();
+  thething(githubToken, owner, repo);
 } catch (error) {
   core.setFailed(error.message);
 }
