@@ -6193,17 +6193,21 @@ const github = __nccwpck_require__(122);
 const thething = async (githubToken, owner, repo) => {
   const octokit = github.getOctokit(githubToken);
 
-  const thing = octokit.rest.repos.listContributors({ owner, repo });
+  const thing = await octokit.rest.repos.listContributors({ owner, repo });
   console.log(thing);
-  const closedIssues = await octokit.rest.issues.list({
-    owner,
-    repo,
-    state: 'closed',
-    labels: ['merged'],
-    since: '2021-05-23T22:37:46.261Z'
-  });
-
-  console.log(closedIssues);
+  try {
+    const closedIssues = await octokit.rest.issues.list({
+      owner,
+      repo,
+      state: 'closed',
+      labels: ['merged'],
+      since: '2021-05-23T22:37:46.261Z'
+    });
+  
+    console.log(closedIssues);
+  } catch (e) {
+    console.log(e);
+  }
 }
 try {
   // `who-to-greet` input defined in action metadata file
