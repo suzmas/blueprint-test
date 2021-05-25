@@ -54,7 +54,7 @@ const thething = async (githubToken, owner, repo) => {
     // console.log('\n\n/// Closed Issues ///\n\n');
     // console.log(closedIssues);
     const searchResults = await octokit.rest.search.issuesAndPullRequests({ q: `repo:suzmas/blueprint-test merged:>${lastReleaseData.created_at} base:master` });
-    console.log(searchResults);
+    console.log(searchResults.data.items);
 
     const newTag = makeNewTagName(lastReleaseData.tag_name);
     console.log('newTag is', newTag);
