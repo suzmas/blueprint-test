@@ -6257,7 +6257,7 @@ try {
   const githubToken = core.getInput('repo-token');
   console.log(payload);
   console.log(payload.repository);
-  const owner = payload.repository.owner.name;
+  const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
   console.log(owner, repo);
 
