@@ -6228,6 +6228,7 @@ const thething = async (githubToken, owner, repo) => {
   // q=repo%3Aadtribute%2Fanalytics%20merged%3A>2021-05-24
   try {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
+    const lastReleaseData = lastRelease.data;
 
 
     
@@ -6236,15 +6237,15 @@ const thething = async (githubToken, owner, repo) => {
     //   repo,
     //   state: 'closed',
     //   labels: ['merged'],
-    //   since: lastRelease.data.created_at
+    //   since: lastReleaseData.created_at
     // });
 
     // console.log('\n\n/// Closed Issues ///\n\n');
     // console.log(closedIssues);
-    const searchResults = await octokit.rest.search.issuesAndPullRequests({ q: 'repo:suzmas/blueprint-test merged:>2021-05-20' });
+    const searchResults = await octokit.rest.search.issuesAndPullRequests({ q: `repo:suzmas/blueprint-test merged:>${lastReleaseData.created_at} base:master` });
     console.log(searchResults);
 
-    const newTag = makeNewTagName(lastRelease.data.tag_name);
+    const newTag = makeNewTagName(lastReleaseData.tag_name);
     console.log('newTag is', newTag);
     
     await octokit.rest.repos.createRelease({ owner, repo, tag_name: newTag });
