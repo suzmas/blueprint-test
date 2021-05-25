@@ -6,7 +6,7 @@ inputs:
     required: true
     default: 'World'
   repo-token: # github token
-    description: 'Github repo token'
+    description: 'Github Repo token'
     required: true
 outputs:
   time: # id of output
