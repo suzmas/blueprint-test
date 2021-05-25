@@ -6217,6 +6217,7 @@ const makeNewTagName = (lastReleaseTagName) => {
   const lastTagBuild = parseInt(tagChunks[1]);
 
   const tagDate = todayTagDate();
+  console.log('lastTagDate', lastTagDate, 'newTagDate', tagDate);
   const shouldResetBuild = lastTagDate !== tagDate;
   console.log('should reset build?', shouldResetBuild);
   const tagBuild = newTagBuild(shouldResetBuild, lastTagBuild);
@@ -6243,7 +6244,7 @@ const thething = async (githubToken, owner, repo) => {
     // console.log('\n\n/// Closed Issues ///\n\n');
     // console.log(closedIssues);
 
-    const searchResults = await octokit.rest.search.issuesAndPullRequests({ q: 'repo%3Aadtribute%2Fanalytics%20merged%3A>2021-05-24' });
+    const searchResults = await octokit.rest.search.issuesAndPullRequests({ q: 'repo%3Asuzmas%2Fblueprint-test%20merged%3A>2021-05-20' });
     console.log(searchResults);
 
     const newTag = makeNewTagName(lastRelease.data.tag_name);
