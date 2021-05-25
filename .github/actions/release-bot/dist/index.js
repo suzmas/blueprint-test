@@ -6233,6 +6233,8 @@ const thething = async (githubToken, owner, repo) => {
   try {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
 
+
+    
     // const closedIssues = await octokit.rest.pulls.list({
     //   owner,
     //   repo,
