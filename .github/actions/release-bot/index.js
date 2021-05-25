@@ -12,7 +12,7 @@ const todayTagDate = () => {
 }
 
 const newTagBuild = (shouldReset, lastTagBuild) => {
-  const lastBuild = shouldReset ? 0 : parseInt(tagChunks[1]) || 0;
+  const lastBuild = shouldReset ? 0 : parseInt(lastTagBuild) || 0;
 
   console.log('lastTagBuild', lastBuild);
   const newTagBuild = (lastBuild + 1).toString().padStart(4, '0');
@@ -29,7 +29,7 @@ const makeNewTagName = (lastReleaseTagName) => {
   const lastTagBuild = parseInt(tagChunks[1]);
 
   const tagDate = todayTagDate();
-  const shouldResetBuild = lastTagDate !== newTagDate;
+  const shouldResetBuild = lastTagDate !== tagDate;
   const tagBuild = newTagBuild(shouldResetBuild, lastTagBuild);
   const newTag = `${tagDate}.${tagBuild}`;
 
