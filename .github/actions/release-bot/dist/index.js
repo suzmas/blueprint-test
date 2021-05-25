@@ -6255,6 +6255,8 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = github.context.payload;
   const githubToken = core.getInput('repo-token');
+  console.log(payload);
+  console.log(payload.repository);
   const owner = payload.repository.owner.name;
   const repo = payload.repository.name;
   console.log(owner, repo);
