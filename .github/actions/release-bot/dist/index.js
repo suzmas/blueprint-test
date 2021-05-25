@@ -6208,6 +6208,14 @@ const thething = async (githubToken, owner, repo) => {
   } catch (e) {
     console.log(e);
   }
+
+  try {
+    const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
+    console.log(lastRelease);
+    const makeNewRelease = await octokit.rest.repos.createRelease({ owner, repo, tag_name: 'Blue' });
+  } catch (e) {
+    console.log(e);
+  }
 }
 try {
   // `who-to-greet` input defined in action metadata file
