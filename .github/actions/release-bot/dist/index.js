@@ -6248,6 +6248,7 @@ const thething = async (githubToken, owner, repo) => {
     console.log(searchResults);
 
     const newTag = makeNewTagName(lastRelease.data.tag_name);
+    console.log('newTag is', newTag);
     
     await octokit.rest.repos.createRelease({ owner, repo, tag_name: newTag });
   } catch (e) {
