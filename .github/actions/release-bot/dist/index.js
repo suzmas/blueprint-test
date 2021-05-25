@@ -6212,7 +6212,18 @@ const thething = async (githubToken, owner, repo) => {
   try {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
     console.log(lastRelease);
-    const makeNewRelease = await octokit.rest.repos.createRelease({ owner, repo, tag_name: 'Blue' });
+    const tagChunks = lastRelease.data.tag_name.split('.');
+    const lastTagDate = tagChunks[0];
+    const lastTagBuild = parseInt(tagChunks[1], 10);
+    console.log('tagBuildNum', tagBuildNum);
+
+    const todayDay = new Date().getDay();
+    const todayMonth = new Date().getMonth();
+    const newTagDate = `${todayDay.toString().padStart(2, '0')}${todayMonth.toString().padStart(2, '0')}`;
+    const newTagBuild = (lastTagBuild + 1).toString().padStart(4, '0');
+    const newTag = `${newTagDate}.${newTagBuild}`;
+    console.log('new tag is ', newTag);
+    const makeNewRelease = await octokit.rest.repos.createRelease({ owner, repo, tag_name: newTag });
   } catch (e) {
     console.log(e);
   }
