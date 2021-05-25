@@ -6214,7 +6214,8 @@ const thething = async (githubToken, owner, repo) => {
     console.log(lastRelease);
     const tagChunks = lastRelease.data.tag_name.split('.');
     const lastTagDate = tagChunks[0];
-    const lastTagBuild = parseInt(tagChunks[1], 10);
+    console.log(tagChunks);
+    const lastTagBuild = parseInt(tagChunks[1]);
     console.log('lastTagBuild', lastTagBuild);
 
     const todayDay = new Date().getDay();
