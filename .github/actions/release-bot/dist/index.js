@@ -6192,7 +6192,7 @@ const github = __nccwpck_require__(122);
 
 const todayTagDate = () => {
   const todayYear = new Date().getFullYear();
-  const todayMonth = new Date().getMonth();
+  const todayMonth = new Date().getMonth() + 1; // .getMonth() returns a zero-based value, so we need to inc by 1
 
   // tag date should be formatted as YYMM
   const newTagDate = `${todayYear.toString().slice(2)}${todayMonth.toString().padStart(2, '0')}`;
@@ -6212,7 +6212,6 @@ const newTagBuild = (shouldReset, lastTagBuild) => {
 
 const makeNewTagName = (lastReleaseTagName) => {
   const tagChunks = lastReleaseTagName.split('.');
-  console.log(tagChunks);
     
   const lastTagDate = tagChunks[0];
   const lastTagBuild = parseInt(tagChunks[1]);
@@ -6228,21 +6227,23 @@ const makeNewTagName = (lastReleaseTagName) => {
 const thething = async (githubToken, owner, repo) => {
   const octokit = github.getOctokit(githubToken);
 
+  // q=repo%3Aadtribute%2Fanalytics%20merged%3A>2021-05-24
   try {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
-    console.log(lastRelease);
 
-    const closedIssues = await octokit.rest.pulls.list({
-      owner,
-      repo,
-      state: 'closed',
-      labels: ['merged'],
-      since: lastRelease.data.created_at
-    });
+    // const closedIssues = await octokit.rest.pulls.list({
+    //   owner,
+    //   repo,
+    //   state: 'closed',
+    //   labels: ['merged'],
+    //   since: lastRelease.data.created_at
+    // });
 
-    console.log('\n\n/// Closed Issues ///\n\n');
-    console.log(closedIssues);
+    // console.log('\n\n/// Closed Issues ///\n\n');
+    // console.log(closedIssues);
 
+    const searchResults = octokit.rest.search.issuesAndPullRequests({ q: 'repo%3Aadtribute%2Fanalytics%20merged%3A>2021-05-24' });
+    console.log(searchResults);
 
     const newTag = makeNewTagName(lastRelease.data.tag_name);
     
