@@ -41,20 +41,11 @@ const thething = async (githubToken, owner, repo) => {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
     const lastReleaseData = lastRelease.data;
 
+    const prSearchResults = await octokit.rest.search.issuesAndPullRequests({ q: `repo:${owner}/${repo} merged:>${lastReleaseData.created_at} base:master` });
+    console.log(prSearchResults.data.items);
 
-    
-    // const closedIssues = await octokit.rest.pulls.list({
-    //   owner,
-    //   repo,
-    //   state: 'closed',
-    //   labels: ['merged'],
-    //   since: lastReleaseData.created_at
-    // });
-
-    // console.log('\n\n/// Closed Issues ///\n\n');
-    // console.log(closedIssues);
-    const searchResults = await octokit.rest.search.issuesAndPullRequests({ q: `repo:suzmas/blueprint-test merged:>${lastReleaseData.created_at} base:master` });
-    console.log(searchResults.data.items);
+    const mergedPulls = prSearchResults.data.items.map(pullData => `${pullData.title}: ${pullData.html_url}`)
+    console.log(mergedPulls);
 
     const newTag = makeNewTagName(lastReleaseData.tag_name);
     console.log('newTag is', newTag);
