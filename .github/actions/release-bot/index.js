@@ -41,6 +41,7 @@ const thething = async (githubToken, owner, repo) => {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
     const lastReleaseData = lastRelease.data;
 
+    console.log(owner, repo);
     const prSearchResults = await octokit.rest.search.issuesAndPullRequests({ q: `repo:${owner}/${repo} merged:>${lastReleaseData.created_at} base:master` });
     console.log(prSearchResults.data.items);
 
