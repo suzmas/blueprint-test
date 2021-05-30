@@ -85,23 +85,28 @@ const getReleasedPRs = async (octokit, owner, repo, lastReleaseTime) => {
   }
 };
 
-try {
-  const time = new Date().toTimeString();
-  core.setOutput("time", time);
 
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const { payload } = github.context;
-  const owner = payload.repository.owner.login;
-  const repo = payload.repository.name;
-
-  console.log(owner, repo);
-
-  const githubToken = core.getInput("repo-token");
-  const octokit = github.getOctokit(githubToken);
-
-  const lastRelease = getLastRelease(octokit, owner, repo);
-  createNewRelease(octokit, owner, repo, lastRelease);
-  getReleasedPRs(githubToken, owner, repo, lastRelease.createdAt);
-} catch (error) {
-  core.setFailed(error.message);
+async function run() {
+  try {
+    const time = new Date().toTimeString();
+    core.setOutput("time", time);
+  
+    // Get the JSON webhook payload for the event that triggered the workflow
+    const { payload } = github.context;
+    const owner = payload.repository.owner.login;
+    const repo = payload.repository.name;
+  
+    console.log(owner, repo);
+  
+    const githubToken = core.getInput("repo-token");
+    const octokit = github.getOctokit(githubToken);
+  
+    const lastRelease = await getLastRelease(octokit, owner, repo);
+    await createNewRelease(octokit, owner, repo, lastRelease);
+    await getReleasedPRs(githubToken, owner, repo, lastRelease.createdAt);
+  } catch (error) {
+    core.setFailed(error.message);
+  }
 }
+
+run();
