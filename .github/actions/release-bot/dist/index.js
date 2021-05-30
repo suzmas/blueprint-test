@@ -6293,7 +6293,7 @@ async function run() {
     const lastRelease = await getLastRelease(octokit, owner, repo);
     console.log(lastRelease);
     await createNewRelease(octokit, owner, repo, lastRelease);
-    await getReleasedPRs(octokit, owner, repo, lastRelease.createdAt);
+    await getReleasedPRs(octokit, owner, repo, lastRelease.created_at);
   } catch (error) {
     core.setFailed(error.message);
   }
