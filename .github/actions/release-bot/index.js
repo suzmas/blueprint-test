@@ -35,8 +35,6 @@ const makeNewTagName = (lastReleaseTagName) => {
 
 const thething = async (githubToken, owner, repo) => {
   const octokit = github.getOctokit(githubToken);
-  console.log('inside thething')
-  // q=repo%3Aadtribute%2Fanalytics%20merged%3A>2021-05-24
   try {
     const lastRelease = await octokit.rest.repos.getLatestRelease({ owner, repo });
     const lastReleaseData = lastRelease.data;
@@ -63,10 +61,11 @@ try {
   console.log(`Hello ${nameToGreet}!`);
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
+
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = github.context.payload;
   const githubToken = core.getInput('repo-token');
-  console.log(payload.repository.owner);
+
   const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
   console.log(owner, repo);

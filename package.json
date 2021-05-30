@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-relase-bot": "ncc build ./.github/actions/release-bot/index.js --license licenses.txt"
   },
   "eslintConfig": {
     "extends": "react-app"
