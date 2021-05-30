@@ -6253,6 +6253,7 @@ const createNewRelease = async (
   try {
     const newVersion = getNewVersionNumber(lastRelease.tag_name);
     console.log("new version is", newVersion);
+    console.log('new desc is', newReleaseDescription);
     await octokit.rest.repos.createRelease({
       owner,
       repo,
