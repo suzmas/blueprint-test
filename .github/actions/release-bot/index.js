@@ -124,6 +124,9 @@ async function run() {
       lastRelease
     );
 
+    console.log(lastRelease);
+    console.log(newReleaseDescription);
+
     await createNewRelease(
       octokit,
       owner,
