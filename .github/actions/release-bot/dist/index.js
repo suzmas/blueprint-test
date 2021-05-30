@@ -6279,7 +6279,7 @@ const getReleasedPRs = async (octokit, owner, repo, lastRelease) => {
       /(app.clubhouse.io\b\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
     const mergedPRList = prSearchResults.data.items.map((pullData) => {
-      const summary = `${pullData.title}: ${pullData.html_url}`;
+      let summary = `${pullData.title}: ${pullData.html_url}`;
       const clubhouseLinks = pullData.body.match(clubhouseUrlRegex) || [];
       if (clubhouseLinks.length) {
         summary += `\nRelated Clubhouse stories: ${clubhouseLinks.join(", ")}`;
