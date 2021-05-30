@@ -103,7 +103,7 @@ async function run() {
   
     const lastRelease = await getLastRelease(octokit, owner, repo);
     await createNewRelease(octokit, owner, repo, lastRelease);
-    await getReleasedPRs(githubToken, owner, repo, lastRelease.createdAt);
+    await getReleasedPRs(octokit, owner, repo, lastRelease.createdAt);
   } catch (error) {
     core.setFailed(error.message);
   }
