@@ -6291,6 +6291,7 @@ async function run() {
     const octokit = github.getOctokit(githubToken);
   
     const lastRelease = await getLastRelease(octokit, owner, repo);
+    console.log(lastRelease);
     await createNewRelease(octokit, owner, repo, lastRelease);
     await getReleasedPRs(octokit, owner, repo, lastRelease.createdAt);
   } catch (error) {
