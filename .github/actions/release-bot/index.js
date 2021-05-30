@@ -91,7 +91,7 @@ const getReleasedPRs = async (octokit, owner, repo, lastRelease) => {
 
     const mergedPRList = prSearchResults.data.items.map((pullData) => {
       const summary = `${pullData.title}: ${pullData.html_url}`;
-      const clubhouseLinks = pullData.body.match(clubhouseUrlRegex);
+      const clubhouseLinks = pullData.body.match(clubhouseUrlRegex) || [];
       if (clubhouseLinks.length) {
         summary += `\nRelated Clubhouse stories: ${clubhouseLinks.join(", ")}`;
       }
