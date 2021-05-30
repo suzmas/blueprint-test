@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build-release-bot": "BOT_DIR='./.github/actions/release-bot';ncc build $BOT_DIR/index.js -o $BOT_DIR/dist --license licenses.txt && git add -A && git commit -m 'Update release-bot';"
+    "build-release-bot": "BOT_DIR='./.github/actions/release-bot';ncc build $BOT_DIR/index.js -o $BOT_DIR/dist --license licenses.txt && git add -A && git commit -m 'Build release-bot';"
   },
   "eslintConfig": {
     "extends": "react-app"
