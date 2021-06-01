@@ -6258,7 +6258,7 @@ const createNewRelease = async (
       name: `v${newVersion}`,
       tag_name: newVersion,
       body: newReleaseDescription,
-      target_commitish: '68d2792'
+      target_commitish: "71ee641aa32d7277cc7b5bbb32cfef8bb809cc8d"
     });
   } catch (e) {
     console.log(e);
