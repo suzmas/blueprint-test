@@ -6258,31 +6258,56 @@ const createNewRelease = async (
       name: `v${newVersion}`,
       tag_name: newVersion,
       body: newReleaseDescription,
-      target_commitish: "71ee641aa32d7277cc7b5bbb32cfef8bb809cc8d"
     });
   } catch (e) {
     console.log(e);
   }
 };
 
-const getReleasedPRs = async (octokit, owner, repo, lastRelease) => {
-  // TODO -- deploys take a bit -- we can't assume no PRs have been merged since image was built (i.e. we cannot rely on the lastRelease.timeStamp..thisRelase.timeStamp) -- need to get the timestamp for the passed commit SHA -- then filter based on that
-  let summaryOfReleasedPRs = "Unknown";
+const getMergedPRs = async (octokit, owner, repo, lastRelease, newReleaseSHA) => {
+  let mergedPRs = [];
 
   try {
-    const prSearchResults = await octokit.rest.search.issuesAndPullRequests({
-      q: `repo:${owner}/${repo} merged:>${lastRelease.created_at} base:master`,
+    const finalCommitInNewRelease = await octokit.rest.search.getCommit({
+      owner,
+      repo,
+      commit_sha: newReleaseSHA
     });
-    console.log(prSearchResults.data.items);
+  
+    const newReleaseTime = finalCommitInNewRelease.commit.committer.date;
+    const lastReleaseTime = lastRelease.created_at;
+  
+    const prSearchResults = await octokit.rest.search.issuesAndPullRequests({
+      q: `repo:${owner}/${repo} merged:${lastReleaseTime}..${newReleaseTime} base:master`,
+    });
 
-    const clubhouseUrlRegex =
-      /(app.clubhouse.io\b\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    mergedPRs = prSearchResults.data.items;
+  } catch (e) {
+    console.log(e);
+  }
 
-    const mergedPRList = prSearchResults.data.items.map((pullData) => {
-      let summary = `${pullData.title}: ${pullData.html_url}`;
-      const clubhouseLinks = pullData.body.match(clubhouseUrlRegex) || [];
+  return mergedPRs;
+}
+
+const extractClubhouseLinks = (prBody) => {
+  const clubRegex = /(https:\/\/app.clubhouse.io\b\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+  const clubhouseLinks = prBody.match(clubRegex) || [];
+  return clubhouseLinks;
+}
+
+const getReleaseSummary = (mergedPRs) => {
+  const header = '# Release Changelog\n'
+  let summaryOfReleasedPRs = '_Unknown_';
+
+  try {
+    const mergedPRList = mergedPRs.data.items.map((pullData) => {
+      let summary = `- ${pullData.title}: ${pullData.html_url}`;
+      const clubhouseLinks = extractClubhouseLinks(pullData.body);
       if (clubhouseLinks.length) {
-        summary += `\nRelated Clubhouse stories: ${clubhouseLinks.join(", ")}`;
+        summary += `\n  - Related Clubhouse stories:`
+        clubhouseLinks.forEach(link => {
+          summary += `\n    - ${link}`
+        })
       }
       return summary;
     });
@@ -6292,7 +6317,8 @@ const getReleasedPRs = async (octokit, owner, repo, lastRelease) => {
     console.log(e);
   }
 
-  return summaryOfReleasedPRs;
+  console.log(header + summaryOfReleasedPRs);
+  return header + summaryOfReleasedPRs;
 };
 
 async function run() {
@@ -6304,21 +6330,20 @@ async function run() {
 
     const githubToken = core.getInput("repo-token");
     const octokit = github.getOctokit(githubToken);
-
+    
     const lastRelease = await getLastReleaseData(octokit, owner, repo);
-    const newReleaseDescription = await getReleasedPRs(
-      octokit,
-      owner,
-      repo,
-      lastRelease
-    );
+    const newReleaseSHA = core.getInput("target-commit-sha");
+
+    const releasedPRs = await getMergedPRs(octokit, owner, repo, lastRelease, newReleaseSHA);
+    const newReleaseDescription = getReleaseSummary(releasedPRs);
 
     await createNewRelease(
       octokit,
       owner,
       repo,
       lastRelease,
-      newReleaseDescription
+      newReleaseDescription,
+      newReleaseSHA
     );
   } catch (error) {
     core.setFailed(error.message);
