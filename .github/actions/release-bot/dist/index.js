@@ -6275,6 +6275,7 @@ const getMergedPRs = async (octokit, owner, repo, lastRelease, newReleaseSHA) =>
       ref: newReleaseSHA
     });
   
+    console.log(finalCommitInNewRelease);
     const newReleaseTime = finalCommitInNewRelease.commit.committer.date;
     const lastReleaseTime = lastRelease.created_at;
   
