@@ -6273,7 +6273,8 @@ const getMergedPRs = async (
   });
 
   const newReleaseTime = finalCommitInNewRelease.data.commit.committer.date;
-  const lastReleaseTime = lastRelease.created_at + 10;
+  console.log(newReleaseTime);
+  const lastReleaseTime = lastRelease.created_at;
 
   const prSearchResults = await octokit.rest.search.issuesAndPullRequests({
     q: `repo:${owner}/${repo} merged:${lastReleaseTime}..${newReleaseTime} base:master`,
