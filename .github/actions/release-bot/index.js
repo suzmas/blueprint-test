@@ -87,7 +87,7 @@ const getMergedPRs = async (octokit, owner, repo, lastRelease, newReleaseSHA) =>
     });
   
     console.log(finalCommitInNewRelease);
-    const newReleaseTime = finalCommitInNewRelease.commit.committer.date;
+    const newReleaseTime = finalCommitInNewRelease.data.commit.committer.date;
     const lastReleaseTime = lastRelease.created_at;
   
     const prSearchResults = await octokit.rest.search.issuesAndPullRequests({
