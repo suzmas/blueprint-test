@@ -90,6 +90,7 @@ const getMergedPRs = async (
     q: `repo:${owner}/${repo} merged:${lastReleaseTime}..${newReleaseTime} base:master`,
   });
   console.log(prSearchResults);
+  console.log(prSearchResults.data);
 
   mergedPRs = prSearchResults.data.items;
 
@@ -107,7 +108,7 @@ const getReleaseSummary = (mergedPRs) => {
   const header = "# Release Changelog\n";
   let summaryOfReleasedPRs = "_Unknown_";
 
-  const mergedPRList = mergedPRs.data.items.map((pullData) => {
+  const mergedPRList = mergedPRs.map((pullData) => {
     let summary = `- ${pullData.title}: ${pullData.html_url}`;
     const clubhouseLinks = extractClubhouseLinks(pullData.body);
     if (clubhouseLinks.length) {
@@ -145,6 +146,8 @@ async function run() {
       lastRelease,
       newReleaseSHA
     );
+    console.log('released?');
+    console.log(releasedPRs);
     const newReleaseDescription = getReleaseSummary(releasedPRs);
 
     await createNewRelease(
