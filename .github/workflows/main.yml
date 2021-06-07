@@ -1,4 +1,11 @@
-on: [workflow_dispatch]
+name: Erm
+on:
+  workflow_dispatch:
+    inputs:
+      commit-sha:
+        description: 'Target commit SHA'
+        required: true
+        default: ''
 
 jobs:
   hello_world_job:

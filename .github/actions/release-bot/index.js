@@ -79,7 +79,8 @@ const getMergedPRs = async (octokit, owner, repo, lastRelease, newReleaseSHA) =>
   let mergedPRs = [];
 
   try {
-    const finalCommitInNewRelease = await octokit.rest.search.getCommit({
+    console.log(newReleaseSHA);
+    const finalCommitInNewRelease = await octokit.rest.repos.getCommit({
       owner,
       repo,
       commit_sha: newReleaseSHA
