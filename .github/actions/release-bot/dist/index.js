@@ -6231,15 +6231,11 @@ const getNewVersionNumber = (lastVersionNumber) => {
 
 const getLastReleaseData = async (octokit, owner, repo) => {
   let lastReleaseData;
-  try {
-    const lastRelease = await octokit.rest.repos.getLatestRelease({
-      owner,
-      repo,
-    });
-    lastReleaseData = lastRelease.data;
-  } catch (e) {
-    console.log(e);
-  }
+  const lastRelease = await octokit.rest.repos.getLatestRelease({
+    owner,
+    repo,
+  });
+  lastReleaseData = lastRelease.data;
   return lastReleaseData;
 };
 
@@ -6250,74 +6246,70 @@ const createNewRelease = async (
   lastRelease,
   newReleaseDescription
 ) => {
-  try {
-    const newVersion = getNewVersionNumber(lastRelease.tag_name);
-    await octokit.rest.repos.createRelease({
-      owner,
-      repo,
-      name: `v${newVersion}`,
-      tag_name: newVersion,
-      body: newReleaseDescription,
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  const newVersion = getNewVersionNumber(lastRelease.tag_name);
+  await octokit.rest.repos.createRelease({
+    owner,
+    repo,
+    name: `v${newVersion}`,
+    tag_name: newVersion,
+    body: newReleaseDescription,
+  });
 };
 
-const getMergedPRs = async (octokit, owner, repo, lastRelease, newReleaseSHA) => {
+const getMergedPRs = async (
+  octokit,
+  owner,
+  repo,
+  lastRelease,
+  newReleaseSHA
+) => {
   let mergedPRs = [];
 
-  try {
-    console.log(newReleaseSHA);
-    const finalCommitInNewRelease = await octokit.rest.repos.getCommit({
-      owner,
-      repo,
-      ref: newReleaseSHA
-    });
-  
-    const newReleaseTime = finalCommitInNewRelease.data.commit.committer.date;
-    const lastReleaseTime = lastRelease.created_at;
-  
-    const prSearchResults = await octokit.rest.search.issuesAndPullRequests({
-      q: `repo:${owner}/${repo} merged:${lastReleaseTime}..${newReleaseTime} base:master`,
-    });
-    console.log(prSearchResults);
+  console.log(newReleaseSHA);
+  const finalCommitInNewRelease = await octokit.rest.repos.getCommit({
+    owner,
+    repo,
+    ref: newReleaseSHA,
+  });
 
-    mergedPRs = prSearchResults.data.items;
-  } catch (e) {
-    console.log(e);
-  }
+  const newReleaseTime = finalCommitInNewRelease.data.commit.committer.date;
+  const lastReleaseTime = lastRelease.created_at + 10;
+
+  const prSearchResults = await octokit.rest.search.issuesAndPullRequests({
+    q: `repo:${owner}/${repo} merged:${lastReleaseTime}..${newReleaseTime} base:master`,
+  });
+  console.log(prSearchResults);
+  console.log(prSearchResults.data);
+
+  mergedPRs = prSearchResults.data.items;
 
   return mergedPRs;
-}
+};
 
 const extractClubhouseLinks = (prBody) => {
-  const clubRegex = /(https:\/\/app.clubhouse.io\b\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+  const clubRegex =
+    /(https:\/\/app.clubhouse.io\b\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
   const clubhouseLinks = prBody.match(clubRegex) || [];
   return clubhouseLinks;
-}
+};
 
 const getReleaseSummary = (mergedPRs) => {
-  const header = '# Release Changelog\n'
-  let summaryOfReleasedPRs = '_Unknown_';
+  const header = "# Release Changelog\n";
+  let summaryOfReleasedPRs = "_Unknown_";
 
-  try {
-    const mergedPRList = mergedPRs.data.items.map((pullData) => {
-      let summary = `- ${pullData.title}: ${pullData.html_url}`;
-      const clubhouseLinks = extractClubhouseLinks(pullData.body);
-      if (clubhouseLinks.length) {
-        summary += `\n  - Related Clubhouse stories:`
-        clubhouseLinks.forEach(link => {
-          summary += `\n    - ${link}`
-        })
-      }
-      return summary;
-    });
+  const mergedPRList = mergedPRs.map((pullData) => {
+    let summary = `- ${pullData.title}: ${pullData.html_url}`;
+    const clubhouseLinks = extractClubhouseLinks(pullData.body);
+    if (clubhouseLinks.length) {
+      summary += `\n  - Related Clubhouse stories:`;
+      clubhouseLinks.forEach((link) => {
+        summary += `\n    - ${link}`;
+      });
+    }
+    return summary;
+  });
 
-    summaryOfReleasedPRs = mergedPRList.join("\n\n");
-  } catch (e) {
-    console.log(e);
-  }
+  summaryOfReleasedPRs = mergedPRList.join("\n\n");
 
   console.log(header + summaryOfReleasedPRs);
   return header + summaryOfReleasedPRs;
@@ -6332,11 +6324,19 @@ async function run() {
 
     const githubToken = core.getInput("repo-token");
     const octokit = github.getOctokit(githubToken);
-    
+
     const lastRelease = await getLastReleaseData(octokit, owner, repo);
     const newReleaseSHA = core.getInput("target-commit-sha");
 
-    const releasedPRs = await getMergedPRs(octokit, owner, repo, lastRelease, newReleaseSHA);
+    const releasedPRs = await getMergedPRs(
+      octokit,
+      owner,
+      repo,
+      lastRelease,
+      newReleaseSHA
+    );
+    console.log('released?');
+    console.log(releasedPRs);
     const newReleaseDescription = getReleaseSummary(releasedPRs);
 
     await createNewRelease(
